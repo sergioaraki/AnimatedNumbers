@@ -1,0 +1,56 @@
+<html>
+<body>
+<div id="value">0</div>
+</body>
+<script>
+	var anim;
+	window.onload = function(){                      
+		navigator.cascades.postMessage("ready");
+	};
+	function callbackAnimation(){
+		navigator.cascades.postMessage("animationEnded");
+	};
+	navigator.cascades.onmessage = function onmessage(message) {
+		var partsArray = message.split(';');
+		if (message.indexOf('style') === 0){
+			//This style is applied to ensure that the animation will work on light and dark theme
+			var value=document.getElementById("value");
+			var style;
+			if (partsArray[1]=='0')
+				style = "color:black;font-size:32px;font-weight:bold;";
+			else
+				style = "color:white;font-size:32px;font-weight:bold;";
+			value.setAttribute("style", style);
+		}
+		else if (message.indexOf('value') === 0) {
+			var fromValue = parseFloat(partsArray[1]);
+			var toValue = parseFloat(partsArray[2]);
+			var precisionFrom = 1;
+			if (partsArray[1].indexOf(".") != -1)
+				precisionFrom = (fromValue+'').split('.')[1].length;
+			var precisionTo = 1;
+			if (partsArray[2].indexOf(".") != -1)
+				precisionTo = (toValue+'').split('.')[1].length;
+			var precision;
+			if (precisionFrom>precisionTo)
+				precision = precisionFrom;
+			else
+				precision = precisionTo;
+			var time = parseFloat(partsArray[3]);
+			anim = new countUp("value", fromValue, toValue, precision, time);
+			if (partsArray.length==4)
+				anim.start();
+			else if (partsArray.length==5) {
+				anim.start(callbackAnimation);
+			}
+		}
+		else if (message.indexOf('reset') === 0) {
+			anim.reset();
+		}
+		else if (message.indexOf('stop') === 0) {
+			anim.stop();
+		}
+    };
+</script>
+<script type="text/javascript" src="countUp.js"></script>
+</html>
