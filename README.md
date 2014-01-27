@@ -8,6 +8,7 @@ This example is based in countUp.js (https://github.com/inorganik/countUp.js) th
 You can import this example in Momentics and run to see the demo.
 
 If you want to add this animation to your project, you need to copy the folder webview that is inside assets and AnimatedValue.qml
+
 Then in your qml just use:
 
 ```js
@@ -20,4 +21,28 @@ AnimatedValue {
             //animation time in seconds (double)
             animTime: 3.5
         }
+```
+
+And you can stop:
+
+```js
+	anim.stop();
+```
+
+reset:
+
+```js
+	anim.reset();
+```
+
+start:
+
+```js
+	anim.start();
+```
+start with callback:
+
+```js
+	anim.endMessage = "This is π";
+	anim.startWithCallback();
 ```
